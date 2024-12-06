@@ -7,7 +7,6 @@ Welcome to the **Cellular Automata Random Map Maker**! This tool generates rando
 
 - **Cellular Automata Algorithm**: Generates organic and random patterns.
 - **Customizable Parameters**: Adjust map size, rules, and iteration steps for unique results.
-- **Visual Representation**: Outputs maps as ASCII grids or visual files (e.g., PNG).
 - **Dynamic Randomization**: Seed-based or purely random generation for repeatability or novelty.
 
 ## Installation
