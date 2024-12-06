@@ -1,0 +1,116 @@
+import pygame
+import sys
+import random
+pygame.init()
+
+clock = pygame.time.Clock()
+display = pygame.display.set_mode((640,640))
+
+def make_map(size,border):
+    grid = []
+    chance = random.randrange(0,3)
+    
+    for i in range(border+ 1):
+        row = []
+        grid.append(row)
+
+        for m in range(border +1):
+            chance = random.randrange(0,10)
+            #default : 4
+            if chance <= 4:
+                row.append("0")
+            #default : 5
+            if chance >= 5:
+                row.append("1")
+
+    return grid
+
+def load_map(size,grid,tiles):
+    y = 0
+    for layer in grid:
+        x = 0
+        for cell in layer:
+            if cell == "0":
+                display.blit(tiles[0],(x*size,y*size))
+            if cell == "1":
+                display.blit(tiles[1],(x*size,y*size))
+            x += 1
+        y += 1
+
+def apply_automation(grid,count,border):
+    i = 0
+    while i < count:
+        y = 0
+        for y in range(border):
+            x = 0
+            for x in range(border):
+                one = 0
+                zero = 0
+                surrounding = [grid[y-1][x],grid[y+1][x],grid[y][x-1],
+                               grid[y][x+1],grid[y+1][x+1],grid[y+1][x-1],
+                               grid[y-1][x+1],grid[y-1][x-1]]
+
+                for m in surrounding:
+                    match m:
+                        case "0":
+                            zero += 1
+                        case "1":
+                            one += 1
+
+                if zero > 4:
+                    grid[y][x] = "0"
+                if one > 4:
+                    grid[y][x] = "1"
+
+            x += 1
+        y += 1
+        i += 1
+                    
+    return grid
+
+def main():
+
+
+#Default:
+#4 PIXELS : Border 160
+#8 PIXELS : Border 80
+#16 PIXELS : Border 40
+
+
+    border = 80
+    size = 8
+    count = 10
+    grid = make_map(size,border)
+    mapping = apply_automation(grid,count,border)
+
+    water = pygame.Surface((size,size))
+    water.fill((0,0,255))
+
+    grass = pygame.Surface((size,size))
+    grass.fill((0,255,0))
+
+    tiles = [water,grass]
+
+    while True:
+                
+        load_map(size,mapping,tiles)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == ord("r"):
+                    main()
+
+                if event.key == ord("l"):
+                    count += 1
+                    apply_automation(grid,count,border)
+                    print(count)
+                
+        pygame.display.update()
+        clock.tick(60)
+
+main()
+#seebiseebididop dop yeah yeah
